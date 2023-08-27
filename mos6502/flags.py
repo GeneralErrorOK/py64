@@ -9,6 +9,16 @@ class Flags:
         self.zero = False
         self.carry = False
 
+    def reset_all(self):
+        self.negative = False
+        self.overflow = False
+        self.expansion = False
+        self.break_command = False
+        self.decimal = False
+        self.interrupt = False
+        self.zero = False
+        self.carry = False
+
     def __int__(self):
         return ((int(self.negative) << 7) +
                  (int(self.overflow) << 6) +
@@ -22,4 +32,8 @@ class Flags:
     @property
     def all(self):
         return self.__int__()
+
+    def set_by_value(self, value):
+        self.negative = bool(value >> 7)
+        self.zero = (value == 0)
 

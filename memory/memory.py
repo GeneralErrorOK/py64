@@ -1,9 +1,9 @@
 class C64Membank:
-    def __init__(self, size: int = 65536) -> None:
-        self._mem = [0 for _ in range(size)]
+    def __init__(self, size: int = 65536, initial_values: int = 0) -> None:
+        self._mem = [initial_values for _ in range(size)]
 
     def __setitem__(self, key, value):
-        if value > 255:
+        if value > 0xFF:
             raise OverflowError("Only 8-bit unsigned integers (0-255) allowed.")
         self._mem[key] = value
 
