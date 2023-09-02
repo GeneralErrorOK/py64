@@ -15,6 +15,15 @@ class MOS6502:
         self.memory = memory
         self._cycle_counter = 0
 
+        self.OPCODE_LOOKUP_TABLE = {
+            0xEA: self._ins_nop,
+            0xA9: self._ins_lda_imm,
+            0xAD: self._ins_lda_abs,
+            0xBD: self._ins_lda_xabs,
+            0xB9: self._ins_lda_yabs,
+            0xA5: self._ins_lda_abs_zp
+        }
+
     @property
     def accumulator(self):
         return self._A
@@ -86,24 +95,13 @@ class MOS6502:
         return self.cycles_completed
 
     def _dispatch(self, instruction: int) -> bool:
-        match instruction:
-            case 0xEA:
-                self._ins_nop()
-            case 0xA9:
-                self._ins_lda_imm()
-            case 0xAD:
-                self._ins_lda_abs()
-            case 0xBD:
-                self._ins_lda_xabs()
-            case 0xB9:
-                self._ins_lda_yabs()
-            case 0xA5:
-                self._ins_lda_abs_zp()
-            case _:
-                print(f"Unrecognized opcode: 0x{instruction:X}")
-                self._cycle_counter -= 1
-                return False
-        return True
+        try:
+            self.OPCODE_LOOKUP_TABLE[instruction]()
+            return True
+        except KeyError:
+            print(f"Unrecognized opcode: 0x{instruction:X}")
+            self._cycle_counter -= 1
+            return False
 
     def _ins_nop(self):
         self.cycle(1)
