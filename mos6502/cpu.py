@@ -1,5 +1,3 @@
-from copy import copy
-
 from memory.memory import C64Membank
 from mos6502.flags import Flags
 
@@ -31,7 +29,7 @@ class MOS6502:
     @accumulator.setter
     def accumulator(self, value: int):
         if value > 0xFFFF:
-            raise OverflowError("Only 8-bit unsigned integers (0-255) allowed.")
+            raise OverflowError("Only 16-bit values allowed.")
         self._A = value
         self.flags.set_by_value(value)
 
@@ -42,7 +40,7 @@ class MOS6502:
     @x_register.setter
     def x_register(self, value: int):
         if value > 0xFFFF:
-            raise OverflowError("Only 16-bit integers allowed.")
+            raise OverflowError("Only 16-bit values allowed.")
         self._X = value
 
     @property
@@ -52,7 +50,7 @@ class MOS6502:
     @y_register.setter
     def y_register(self, value: int):
         if value > 0xFFFF:
-            raise OverflowError("Only 16-bit integers allowed.")
+            raise OverflowError("Only 16-bit values allowed.")
         self._Y = value
 
     @property
